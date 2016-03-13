@@ -33,31 +33,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         var $items = this.$el.find(this.options.itemSelector);
 
-        $items.get().reduce(function (matrix, item, i) {
+        var grid = $items.get().reduce(function (grid, item) {
           var $item = $(item);
+          var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
+          var items = [];
 
-          if (i >= colsInRow) {
-            (function () {
-              var $itemAbove = matrix[i - colsInRow];
-
-              // debugger
-
-              var delta = $item.position().top - $itemAbove.position().top - $itemAbove.outerHeight() - parseInt($item.css('margin-bottom')) - parseInt($itemAbove.css('margin-bottom'));
-
-              if (delta) {
-                $item.css('margin-top', function (_, marginTop) {
-                  return parseInt(marginTop) - delta;
-                });
-              }
-            })();
+          for (var j = 0; j < cols; j++) {
+            items.push($item);
           }
 
-          var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
-
-          // for(let j = 0; j < cols; j++) { $items.push($item) };
-
-          return matrix.push($item) && matrix;
+          return grid.concat(items);
         }, []);
+
+        grid.forEach(function (item, i) {
+          if (i <= colsInRow) {
+            return;
+          }
+
+          var $item = $(item);
+          var $itemAbove = grid[i - colsInRow];
+
+          var delta = $item.offset().top - parseInt($item.css('margin-bottom')) - $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
+
+          if (delta) {
+            $item.css('margin-top', function (_, value) {
+              return parseInt(value) - delta;
+            });
+          }
+        });
       }
     }, {
       key: 'rebuild',

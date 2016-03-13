@@ -7,7 +7,7 @@
       .page-column {
         display: inline-block;
         vertical-align: top;
-        width: 420px;
+        width: 460px;
       }
 
       .page-column + .page-column {
@@ -21,7 +21,7 @@
 
       .grid__item {
         display: inline-block;
-        width: 100px;
+        width: 80px;
         vertical-align: top;
         margin: 10px;
         font-weight: bold;
@@ -31,19 +31,32 @@
       }
 
       .grid__item:nth-child(1) {
-        height: 100px;
+        width: 200px;
+        height: 60px;
       }
 
-      .grid__item:nth-child(2n) {
-        height: 150px;
+      .grid__item:nth-child(2) {
+        width: 200px;
       }
 
-      .grid__item:nth-child(3n) {
+      .grid__item:nth-child(3) {
+        height: 90px;
+      }
+
+      .grid__item:nth-child(4) {
         height: 50px;
       }
 
-      .grid__item:nth-child(5n) {
-        height: 80px;
+      .grid__item:nth-child(5) {
+        height: 100px;
+      }
+
+      .grid__item:nth-child(6) {
+        height: 120px;
+      }
+
+      .grid__item:nth-child(7) {
+        width: 200px;
       }
     </style>
   </head>
@@ -51,36 +64,38 @@
     <div class="page-column">
       <h2>Without TightGrid</h2>
       <div class="grid">
-        <div class="grid__item">1</div>
-        <div class="grid__item">2</div>
-        <div class="grid__item">3</div>
-        <div class="grid__item">4</div>
-        <div class="grid__item">5</div>
-        <div class="grid__item">6</div>
-        <div class="grid__item">7</div>
-        <div class="grid__item">8</div>
-        <div class="grid__item">9</div>
+        <div class="grid__item">1</div><!--
+     --><div class="grid__item">2</div><!--
+     --><div class="grid__item">3</div><!--
+     --><div class="grid__item">4</div><!--
+     --><div class="grid__item">5</div><!--
+     --><div class="grid__item">6</div><!--
+     --><div class="grid__item">7</div><!--
+     --><div class="grid__item">8</div><!--
+     --><div class="grid__item">9</div>
       </div>
     </div>
 
     <div class="page-column">
       <h2>With TightGrid</h2>
       <div class="grid js-grid">
-        <div class="grid__item js-item">1</div>
-        <div class="grid__item js-item">2</div>
-        <div class="grid__item js-item">3</div>
-        <div class="grid__item js-item">4</div>
-        <div class="grid__item js-item">5</div>
-        <div class="grid__item js-item">6</div>
-        <div class="grid__item js-item">7</div>
-        <div class="grid__item js-item">8</div>
-        <div class="grid__item js-item">9</div>
+        <div class="grid__item js-item">1</div><!--
+     --><div class="grid__item js-item">2</div><!--
+     --><div class="grid__item js-item">3</div><!--
+     --><div class="grid__item js-item">4</div><!--
+     --><div class="grid__item js-item">5</div><!--
+     --><div class="grid__item js-item">6</div><!--
+     --><div class="grid__item js-item">7</div><!--
+     --><div class="grid__item js-item">8</div><!--
+     --><div class="grid__item js-item">9</div>
       </div>
     </div>
 
     <script>
       $(document).ready(function() {
-        $('.js-grid').tightGrid();
+        $('.js-grid').tightGrid({
+          columnWidth: 100
+        });
       });
     </script>
   </body>

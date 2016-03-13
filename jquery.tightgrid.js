@@ -18,33 +18,32 @@
     }
 
     build() {
-      const colsInRow = Math.floor(this.$el.width() / this.columnWidth);
+      let colsInRow = Math.floor(this.$el.width() / this.columnWidth);
 
-      const $items = this.$el.find(this.options.itemSelector);
+      let $items = this.$el.find(this.options.itemSelector);
 
-      $items.get().reduce((matrix, item, i) => {
+      let grid = $items.get().reduce((grid, item) => {
         let $item = $(item);
+        let cols  = Math.floor($item.outerWidth(true) / this.columnWidth);
+        let items = [];
 
-        if (i >= colsInRow) {
-          const $itemAbove = matrix[i - colsInRow];
+        for(let j = 0; j < cols; j++) { items.push($item) }
 
-          // debugger
+        return grid.concat(items);
+      }, []));
 
-          const delta =
-            $item.position().top - $itemAbove.position().top - $itemAbove.outerHeight() -
-            parseInt($item.css('margin-bottom')) - parseInt($itemAbove.css('margin-bottom'));
+      grid.forEach((item, i) => {
+        if (i <= colsInRow) { return }
 
-          if (delta) {
-            $item.css('margin-top', (_, marginTop) => { return parseInt(marginTop) - delta })
-          }
-        }
+        let $item      = $(item);
+        let $itemAbove = grid[i - colsInRow];
 
-        let cols = Math.floor($item.outerWidth(true) / this.columnWidth);
+        let delta =
+          $item.offset().top - parseInt($item.css('margin-bottom')) -
+          $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
 
-        // for(let j = 0; j < cols; j++) { $items.push($item) };
-
-        return matrix.push($item) && matrix;
-      }, []);
+        if (delta) { $item.css('margin-top', (_, value) => parseInt(value) - delta) }
+      });
     }
 
     rebuild() {
