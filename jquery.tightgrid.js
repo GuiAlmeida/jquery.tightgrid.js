@@ -23,27 +23,26 @@
       let $items = this.$el.find(this.options.itemSelector);
 
       let grid = $items.get().reduce((grid, item) => {
+        let i = grid.length;
         let $item = $(item);
+
+        if (i >= colsInRow) {
+          let $itemAbove = grid[i - colsInRow];
+
+          let delta =
+            $item.offset().top - parseInt($item.css('margin-bottom')) -
+            $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
+
+          if (delta) { $item.css('margin-top', (_, value) => parseInt(value) - delta) }
+        }
+
         let cols  = Math.floor($item.outerWidth(true) / this.columnWidth);
         let items = [];
 
         for(let j = 0; j < cols; j++) { items.push($item) }
 
         return grid.concat(items);
-      }, []));
-
-      grid.forEach((item, i) => {
-        if (i <= colsInRow) { return }
-
-        let $item      = $(item);
-        let $itemAbove = grid[i - colsInRow];
-
-        let delta =
-          $item.offset().top - parseInt($item.css('margin-bottom')) -
-          $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
-
-        if (delta) { $item.css('margin-top', (_, value) => parseInt(value) - delta) }
-      });
+      }, []);
     }
 
     rebuild() {

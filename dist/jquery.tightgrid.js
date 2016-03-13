@@ -34,7 +34,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var $items = this.$el.find(this.options.itemSelector);
 
         var grid = $items.get().reduce(function (grid, item) {
+          var i = grid.length;
           var $item = $(item);
+
+          if (i >= colsInRow) {
+            (function () {
+              var $itemAbove = grid[i - colsInRow];
+
+              var delta = $item.offset().top - parseInt($item.css('margin-bottom')) - $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
+
+              if (delta) {
+                $item.css('margin-top', function (_, value) {
+                  return parseInt(value) - delta;
+                });
+              }
+            })();
+          }
+
           var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
           var items = [];
 
@@ -44,23 +60,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           return grid.concat(items);
         }, []);
-
-        grid.forEach(function (item, i) {
-          if (i <= colsInRow) {
-            return;
-          }
-
-          var $item = $(item);
-          var $itemAbove = grid[i - colsInRow];
-
-          var delta = $item.offset().top - parseInt($item.css('margin-bottom')) - $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
-
-          if (delta) {
-            $item.css('margin-top', function (_, value) {
-              return parseInt(value) - delta;
-            });
-          }
-        });
       }
     }, {
       key: 'rebuild',
