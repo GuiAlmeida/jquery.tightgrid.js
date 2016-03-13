@@ -26,16 +26,24 @@
         let $item = $(item);
 
         if (i >= colsInRow) {
-          const delta = $item.offset().top - matrix[i - colsInRow];
-          //parseInt($item.css('margin-bottom'))
-          if (delta) { $item.css('margin-top', -delta ) }
+          const $itemAbove = matrix[i - colsInRow];
+
+          // debugger
+
+          const delta =
+            $item.position().top - $itemAbove.position().top - $itemAbove.outerHeight() -
+            parseInt($item.css('margin-bottom')) - parseInt($itemAbove.css('margin-bottom'));
+
+          if (delta) {
+            $item.css('margin-top', (_, marginTop) => { return parseInt(marginTop) - delta })
+          }
         }
 
-        let bottom = $item.offset().top + $item.outerHeight();
-        let cols   = Math.floor($item.outerWidth(true) / this.columnWidth);
+        let cols = Math.floor($item.outerWidth(true) / this.columnWidth);
+
         // for(let j = 0; j < cols; j++) { $items.push($item) };
 
-        return matrix.concat([bottom])
+        return matrix.push($item) && matrix;
       }, []);
     }
 

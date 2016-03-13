@@ -37,18 +37,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           var $item = $(item);
 
           if (i >= colsInRow) {
-            var delta = $item.offset().top - matrix[i - colsInRow];
-            //parseInt($item.css('margin-bottom'))
-            if (delta) {
-              $item.css('margin-top', -delta);
-            }
+            (function () {
+              var $itemAbove = matrix[i - colsInRow];
+
+              // debugger
+
+              var delta = $item.position().top - $itemAbove.position().top - $itemAbove.outerHeight() - parseInt($item.css('margin-bottom')) - parseInt($itemAbove.css('margin-bottom'));
+
+              if (delta) {
+                $item.css('margin-top', function (_, marginTop) {
+                  return parseInt(marginTop) - delta;
+                });
+              }
+            })();
           }
 
-          var bottom = $item.offset().top + $item.outerHeight();
           var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
+
           // for(let j = 0; j < cols; j++) { $items.push($item) };
 
-          return matrix.concat([bottom]);
+          return matrix.push($item) && matrix;
         }, []);
       }
     }, {
