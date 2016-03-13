@@ -32,7 +32,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var colsInRow = Math.floor(this.$el.width() / this.columnWidth);
         var $items = [];
 
-        this.$el.find(this.options.itemSelector).map(function (_, item) {
+        this.$el.find(this.options.itemSelector).each(function (_, item) {
           var $item = $(item);
           var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
 

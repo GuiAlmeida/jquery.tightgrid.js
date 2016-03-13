@@ -21,7 +21,7 @@
       const colsInRow = Math.floor(this.$el.width() / this.columnWidth);
       let $items      = [];
 
-      this.$el.find(this.options.itemSelector).map((_, item) => {
+      this.$el.find(this.options.itemSelector).each((_, item) => {
         let $item = $(item);
         let cols  = Math.floor($item.outerWidth(true) / this.columnWidth);
 
