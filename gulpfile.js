@@ -14,7 +14,7 @@ gulp.task('build', () => {
     .pipe(gulp.dest('dist'))
 });
 
-gulp.task('watch', () => {
+gulp.task('watch', ['build'], () => {
   gulp.watch('jquery.tightgrid.js', ['build']);
 });
 

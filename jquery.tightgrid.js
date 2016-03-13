@@ -19,34 +19,24 @@
 
     build() {
       const colsInRow = Math.floor(this.$el.width() / this.columnWidth);
-      let $items      = [];
 
-      this.$el.find(this.options.itemSelector).map((_, item) => {
+      const $items = this.$el.find(this.options.itemSelector);
+
+      $items.get().reduce((matrix, item, i) => {
         let $item = $(item);
-        let cols  = Math.floor($item.outerWidth(true) / this.columnWidth);
 
-        for(let i = 0; i < cols; i++) { $items.push($item) };
-      });
+        if (i >= colsInRow) {
+          const delta = $item.offset().top - matrix[i - colsInRow];
+          //parseInt($item.css('margin-bottom'))
+          if (delta) { $item.css('margin-top', -delta ) }
+        }
 
-      $items.forEach(($item, i) => {
-        if (i < colsInRow) { return }
+        let bottom = $item.offset().top + $item.outerHeight();
+        let cols   = Math.floor($item.outerWidth(true) / this.columnWidth);
+        // for(let j = 0; j < cols; j++) { $items.push($item) };
 
-        const $itemAbove = $items[i - colsInRow];
-
-        const bottomOffsetOfItemAbove =
-          $itemAbove.offset().top +
-          $itemAbove.outerHeight() +
-          parseInt($itemAbove.css('margin-bottom'));
-
-        const topOffsetOfItem =
-          $item.offset().top -
-          parseInt($item.css('margin-top')) -
-          parseInt($itemAbove.css('margin-bottom'));
-
-        const delta = topOffsetOfItem - bottomOffsetOfItemAbove;
-
-        if (delta) { $item.css('margin-top', -delta) }
-      });
+        return matrix.concat([bottom])
+      }, []);
     }
 
     rebuild() {

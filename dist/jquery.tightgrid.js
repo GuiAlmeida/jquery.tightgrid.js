@@ -30,34 +30,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var _this = this;
 
         var colsInRow = Math.floor(this.$el.width() / this.columnWidth);
-        var $items = [];
 
-        this.$el.find(this.options.itemSelector).map(function (_, item) {
+        var $items = this.$el.find(this.options.itemSelector);
+
+        $items.get().reduce(function (matrix, item, i) {
           var $item = $(item);
+
+          if (i >= colsInRow) {
+            var delta = $item.offset().top - matrix[i - colsInRow];
+            //parseInt($item.css('margin-bottom'))
+            if (delta) {
+              $item.css('margin-top', -delta);
+            }
+          }
+
+          var bottom = $item.offset().top + $item.outerHeight();
           var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
+          // for(let j = 0; j < cols; j++) { $items.push($item) };
 
-          for (var i = 0; i < cols; i++) {
-            $items.push($item);
-          };
-        });
-
-        $items.forEach(function ($item, i) {
-          if (i < colsInRow) {
-            return;
-          }
-
-          var $itemAbove = $items[i - colsInRow];
-
-          var bottomOffsetOfItemAbove = $itemAbove.offset().top + $itemAbove.outerHeight() + parseInt($itemAbove.css('margin-bottom'));
-
-          var topOffsetOfItem = $item.offset().top - parseInt($item.css('margin-top')) - parseInt($itemAbove.css('margin-bottom'));
-
-          var delta = topOffsetOfItem - bottomOffsetOfItemAbove;
-
-          if (delta) {
-            $item.css('margin-top', -delta);
-          }
-        });
+          return matrix.concat([bottom]);
+        }, []);
       }
     }, {
       key: 'rebuild',
