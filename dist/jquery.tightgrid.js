@@ -33,7 +33,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         var $items = this.$el.find(this.options.itemSelector);
 
-        var grid = $items.get().reduce(function (grid, item) {
+        $items.get().reduce(function (grid, item) {
           var i = grid.length;
           var $item = $(item);
 
@@ -52,13 +52,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }
 
           var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
-          var items = [];
 
-          for (var j = 0; j < cols; j++) {
-            items.push($item);
-          }
-
-          return grid.concat(items);
+          return grid.concat(new Array(cols).fill($item));
         }, []);
       }
     }, {

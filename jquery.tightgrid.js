@@ -22,7 +22,7 @@
 
       let $items = this.$el.find(this.options.itemSelector);
 
-      let grid = $items.get().reduce((grid, item) => {
+      $items.get().reduce((grid, item) => {
         let i = grid.length;
         let $item = $(item);
 
@@ -36,12 +36,9 @@
           if (delta) { $item.css('margin-top', (_, value) => parseInt(value) - delta) }
         }
 
-        let cols  = Math.floor($item.outerWidth(true) / this.columnWidth);
-        let items = [];
+        let cols = Math.floor($item.outerWidth(true) / this.columnWidth);
 
-        for(let j = 0; j < cols; j++) { items.push($item) }
-
-        return grid.concat(items);
+        return grid.concat(new Array(cols).fill($item));
       }, []);
     }
 
