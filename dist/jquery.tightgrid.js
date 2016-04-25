@@ -34,27 +34,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var $items = this.$el.find(this.options.itemSelector);
 
         $items.get().reduce(function (grid, item) {
-          var i = grid.length;
           var $item = $(item);
-
-          if (i >= colsInRow) {
-            (function () {
-              var $itemAbove = grid[i - colsInRow];
-
-              var delta = $item.offset().top - parseInt($item.css('margin-bottom')) - $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
-
-              if (delta) {
-                $item.css('margin-top', function (_, value) {
-                  return parseInt(value) - delta;
-                });
-              }
-            })();
-          }
-
           var cols = Math.floor($item.outerWidth(true) / _this.columnWidth);
 
           return grid.concat(new Array(cols).fill($item));
-        }, []);
+        }, []).forEach(function ($item, i, grid) {
+          if (i <= colsInRow) return;
+
+          var $itemAbove = grid[i - colsInRow];
+
+          var delta = $item.offset().top - parseInt($item.css('margin-bottom')) - $itemAbove.offset().top - parseInt($itemAbove.css('margin-bottom')) - $itemAbove.outerHeight();
+
+          $item.css('margin-top', function (_, marginTop) {
+            marginTop = parseInt(marginTop);
+
+            console.log(marginTop);
+
+            return marginTop - delta;
+            // return marginTop < marginTop - delta ? marginTop - delta : marginTop
+          });
+        });
       }
     }, {
       key: 'rebuild',

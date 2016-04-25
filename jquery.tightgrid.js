@@ -22,24 +22,34 @@
 
       let $items = this.$el.find(this.options.itemSelector);
 
-      $items.get().reduce((grid, item) => {
-        let i = grid.length;
-        let $item = $(item);
+      $items
+        .get()
+        .reduce((grid, item) => {
+          let $item = $(item);
+          let cols  = Math.floor($item.outerWidth(true) / this.columnWidth);
 
-        if (i >= colsInRow) {
+          return grid.concat(new Array(cols).fill($item));
+        }, [])
+
+        .forEach(($item, i, grid) => {
+          if (i <= colsInRow) return;
+
           let $itemAbove = grid[i - colsInRow];
 
           let delta =
-            $item.offset().top - parseInt($item.css('margin-bottom')) -
-            $itemAbove.offset().top - $itemAbove.outerHeight() - parseInt($itemAbove.css('margin-bottom'));
+            $item.offset().top      - parseInt($item.css('margin-bottom')) -
+            $itemAbove.offset().top - parseInt($itemAbove.css('margin-bottom')) - $itemAbove.outerHeight()
 
-          if (delta) { $item.css('margin-top', (_, value) => parseInt(value) - delta) }
-        }
+          $item.css('margin-top', (_, marginTop) => {
+            marginTop = parseInt(marginTop);
 
-        let cols = Math.floor($item.outerWidth(true) / this.columnWidth);
+            console.log(marginTop)
 
-        return grid.concat(new Array(cols).fill($item));
-      }, []);
+            return marginTop - delta;
+            // return marginTop < marginTop - delta ? marginTop - delta : marginTop
+          });
+
+        });
     }
 
     rebuild() {
